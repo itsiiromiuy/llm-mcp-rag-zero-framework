@@ -1,0 +1,27 @@
+{
+  "name": "llm-mcp-rag-zero-framework",
+  "version": "1.0.0",
+  "description": "[x](https://www.anthropic.com/engineering/building-effective-agents)",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "chalk": "^5.4.1",
+    "dotenv": "^16.5.0",
+    "openai": "^4.96.0",
+    "zod": "^3.24.3"
+  }
+}

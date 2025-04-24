@@ -1,0 +1,53 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Production build
+dist/
+build/
+out/
+
+# System files
+.DS_Store
+.AppleDouble
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor and IDE files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Environment files
+.env
+.env.*
+*.pem
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# TypeScript output
+*.js
+*.d.ts
+
+# Optional: Ignore package-lock.json or yarn.lock if you don't want to track dependency updates
+# package-lock.json
+# yarn.lock
