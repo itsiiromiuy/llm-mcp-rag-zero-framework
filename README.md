@@ -41,3 +41,12 @@ npm install @modelcontextprotocol/sdk
     - [langchain](https://python.langchain.com/docs/integrations/document_loaders/)
 - JSONPlaceholder:
     - [jsonplaceholder](https://jsonplaceholder.typicode.com/)
+
+## MCP Server:
+
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+```
+brew install uv
+```
+

@@ -1,17 +1,22 @@
+import GeminiChatClient from "./GeminiChatClient";
 import MCPClient from "./MCPClient";
-import { logTitle } from "./utils";
 
-logTitle("STARTING MCP CLIENT");
+// const geminiChatClient = new GeminiChatClient("gemini-chat-client");
 
-const mcpClient = new MCPClient("mcp-client", "node", ["build/index.js"]);
-await mcpClient.init();
+// const prompt = "What is the capital of the moon?";
+// const result = await geminiChatClient.chat(prompt);
+// console.log(result);
 
-const tools = mcpClient.getTools();
+async function main() {
+  const fetchMCP = new MCPClient("mcp-server-fetch", "uvx", [
+    "mcp-server-fetch"
+  ]);
+  await fetchMCP.init();
+  const tools = fetchMCP.getTools();
+  console.log(tools);
+  await fetchMCP.close();
+}
 
-const prompt = "What is the capital of the moon?";
-const result = await mcpClient.callTool("capital", {
-  country: "moon"
-});
+main();
 
-console.log(result);
-await mcpClient.close();
+//npx @modelcontextprotocol/inspector uvx mcp-server-fetch
