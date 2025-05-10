@@ -34,6 +34,11 @@ Thumbs.db
 *.sln
 *.swp
 
+# Cursor IDE files
+.cursor/rules/
+.cursorignore
+.cursor/settings.json
+
 # Environment files
 .env
 .env.*
