@@ -1,40 +1,70 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { Tool } from "@modelcontextprotocol/sdk/types.js";
+import { API_CONSTANTS, ERROR_MESSAGES } from "./constants";
+import { AppError, ErrorType, Tool } from "./types";
+import { logError } from "./utils";
 
+/**
+ * MCP client class for communicating with MCP servers
+ */
 export default class MCPClient {
-  private mcp: Client;
-  private command: string;
-  private args: string[];
+  private readonly mcp: Client;
+  private readonly command: string;
+  private readonly args: string[];
   private transport: StdioClientTransport | null = null;
   private tools: Tool[] = [];
 
-  constructor(name: string, command: string, args: string[], version?: string) {
-    this.mcp = new Client({ name, version: version || "0.0.1" });
+  /**
+   * Create an MCP client instance
+   * @param name Client name
+   * @param command Command
+   * @param args Command arguments
+   * @param version Version number (optional)
+   */
+  constructor(
+    name: string,
+    command: string,
+    args: string[],
+    version: string = API_CONSTANTS.DEFAULT_VERSION
+  ) {
+    this.mcp = new Client({ name, version });
     this.command = command;
     this.args = args;
   }
 
-  public async init() {
+  /**
+   * Initialize and connect to the MCP server
+   */
+  public async init(): Promise<void> {
     await this.connectToServer();
   }
 
-  public async close() {
-    await this.mcp.close();
-  }
-
-  public getTools() {
+  /**
+   * Get the list of available tools
+   * @returns List of tools
+   */
+  public getTools(): Tool[] {
     return this.tools;
   }
 
-  public callTool(name: string, params: Record<string, any>) {
+  /**
+   * Call a specific tool
+   * @param name Tool name
+   * @param params Call parameters
+   * @returns Tool call result
+   */
+  public callTool(name: string, params: Record<string, any>): Promise<any> {
     return this.mcp.callTool({
       name,
       arguments: params
     });
   }
 
-  private async connectToServer() {
+  /**
+   * Connect to the MCP server and get available tools
+   * @private
+   */
+  private async connectToServer(): Promise<void> {
     try {
       this.transport = new StdioClientTransport({
         command: this.command,
@@ -43,20 +73,22 @@ export default class MCPClient {
       await this.mcp.connect(this.transport);
 
       const toolsResult = await this.mcp.listTools();
-      this.tools = toolsResult.tools.map((tool) => {
-        return {
-          name: tool.name,
-          description: tool.description,
-          inputSchema: tool.inputSchema
-        };
-      });
+      this.tools = toolsResult.tools.map((tool) => ({
+        name: tool.name,
+        description: tool.description || "No description available",
+        inputSchema: tool.inputSchema
+      }));
+
       console.log(
         "Connected to server with tools:",
         this.tools.map(({ name }) => name)
       );
-    } catch (e) {
-      console.log("Failed to connect to MCP server: ", e);
-      throw e;
+    } catch (error) {
+      logError(ERROR_MESSAGES.FAILED_TO_CONNECT, error);
+      throw new AppError(
+        ErrorType.CONNECTION_FAILED,
+        `${ERROR_MESSAGES.FAILED_TO_CONNECT}${error}`
+      );
     }
   }
 }
